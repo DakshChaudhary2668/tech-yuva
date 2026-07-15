@@ -29,10 +29,10 @@ Tech Yuva is the flagship student-led innovation guild empowering developers to 
    npm install
    ```
 
-3. **Environment Setup:**
+3. //**Environment Setup:**
    Create a `.env` file in the root directory and configure your Neon Postgres database:
    ```env
-   DATABASE_URL="postgresql://user:password@endpoint.neon.tech/tech_yuva?sslmode=require"
+  // DATABASE_URL="postgresql://user:password@endpoint.neon.tech/tech_yuva?sslmode=require"
    ```
 
 4. **Database Migrations & Seeding:**
