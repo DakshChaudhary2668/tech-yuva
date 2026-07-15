@@ -120,7 +120,14 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   // Resolution phase logic
   useEffect(() => {
     // The finishSequence is now triggered via onAnimationEnd on the ripple element
-  }, [phase]);
+    // Safety fallback in case animation events don't fire reliably in some browsers
+    if (phase === "resolution") {
+      const timer = setTimeout(() => {
+        finishSequence();
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, finishSequence]);
 
   if (phase === "done") return null;
 

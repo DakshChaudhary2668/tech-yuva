@@ -127,7 +127,7 @@ console.log("Your journey starts here 🚀");`;
         </p>
 
         {/* Action button rows */}
-        <div className="flex flex-col sm:flex-row gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row gap-4 pt-2 relative z-50">
           <a
             href="https://chat.whatsapp.com/EARK4FcxQn0EW987zH9I08"
             target="_blank"
