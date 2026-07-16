@@ -449,20 +449,17 @@ export default function App() {
             
             {cmsData?.offerings && cmsData.offerings.length > 0 ? (
               cmsData.offerings.map((off: any, idx: number) => {
-                const isWide = idx % 3 === 0 || idx % 3 === 1; // alternating wide and narrow columns
-                const colSpan = isWide ? "md:col-span-8" : "md:col-span-4";
-                const bgColors = ["bg-[#1E90FF]/15 text-neon-blue", "bg-saffron/15 text-saffron", "bg-purple-500/10 text-purple-400", "bg-emerald-green/15 text-emerald-green"];
+                const layoutSpans = ["md:col-span-8", "md:col-span-4", "md:col-span-4", "md:col-span-4", "md:col-span-4", "md:col-span-12"];
+                const colSpan = layoutSpans[idx % layoutSpans.length];
+                const bgColors = ["bg-[#1E90FF]/15 text-neon-blue", "bg-saffron/15 text-saffron", "bg-purple-500/10 text-purple-400", "bg-emerald-green/15 text-emerald-green", "bg-pink-500/15 text-pink-400", "bg-amber-500/15 text-amber-400"];
                 const iconColor = bgColors[idx % bgColors.length];
                 
-                // Assign matching icons to maintain high quality
                 let OfferingIcon = Code2;
-                if (off.title?.toLowerCase().includes("api") || off.title?.toLowerCase().includes("workshop")) {
-                  OfferingIcon = Terminal;
-                } else if (off.title?.toLowerCase().includes("talk") || off.title?.toLowerCase().includes("corporate")) {
-                  OfferingIcon = Presentation;
-                } else if (off.title?.toLowerCase().includes("ai") || off.title?.toLowerCase().includes("generative")) {
-                  OfferingIcon = Cpu;
-                }
+                if (off.title?.toLowerCase().includes("system") || off.title?.toLowerCase().includes("api") || off.icon === "terminal") OfferingIcon = Terminal;
+                else if (off.title?.toLowerCase().includes("talk") || off.title?.toLowerCase().includes("corporate") || off.icon === "presentation") OfferingIcon = Presentation;
+                else if (off.title?.toLowerCase().includes("ai") || off.title?.toLowerCase().includes("generative") || off.icon === "cpu") OfferingIcon = Cpu;
+                else if (off.title?.toLowerCase().includes("open source") || off.icon === "github") OfferingIcon = Github;
+                else if (off.title?.toLowerCase().includes("pitch") || off.title?.toLowerCase().includes("startup") || off.icon === "award") OfferingIcon = Award;
 
                 return (
                   <div key={off.id || idx} className={`${colSpan} p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]`}>
@@ -471,7 +468,7 @@ export default function App() {
                         <OfferingIcon className="w-5 h-5" />
                       </div>
                       {off.badge && (
-                        <span className="text-[9px] font-mono border border-border-color py-1 px-3 rounded uppercase bg-[#1A1A1A]">
+                        <span className={`text-[9px] font-mono border border-border-color py-1 px-3 rounded uppercase bg-[#1A1A1A] ${iconColor.split(' ')[1]}`}>
                           {off.badge}
                         </span>
                       )}
@@ -485,13 +482,13 @@ export default function App() {
               })
             ) : (
               <>
-                {/* 1. Grand Hackathons (Wide) */}
+                {/* 1. Grand Hackathons */}
                 <div className="md:col-span-8 p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]">
                   <div className="flex justify-between items-start">
                     <div className="w-10 h-10 rounded bg-[#1E90FF]/15 text-neon-blue flex items-center justify-center">
                       <Code2 className="w-5 h-5" />
                     </div>
-                    <span className="text-[9px] font-mono text-neon-blue bg-[#1A1A1A] border border-border-color py-1 px-3 rounded">FLAGSHIP TRACK</span>
+                    <span className="text-[9px] font-mono text-neon-blue bg-[#1A1A1A] border border-border-color py-1 px-3 rounded uppercase">FLAGSHIP TRACK</span>
                   </div>
                   <div className="mt-6 space-y-2">
                     <h3 className="text-lg font-display uppercase font-bold text-text-primary">36-Hour Hackathons</h3>
@@ -501,44 +498,79 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* 2. Interactive Workshops (Tall) */}
+                {/* 2. Systems Engineering */}
                 <div className="md:col-span-4 p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]">
-                  <div className="w-10 h-10 rounded bg-saffron/15 text-saffron flex items-center justify-center">
-                    <Terminal className="w-5 h-5" />
+                  <div className="flex justify-between items-start">
+                    <div className="w-10 h-10 rounded bg-saffron/15 text-saffron flex items-center justify-center">
+                      <Terminal className="w-5 h-5" />
+                    </div>
+                    <span className="text-[9px] font-mono text-saffron bg-[#1A1A1A] border border-border-color py-1 px-3 rounded uppercase">CORE CURRICULUM</span>
                   </div>
                   <div className="space-y-2 mt-4">
-                    <h3 className="text-base font-display uppercase font-bold text-text-primary">Systems Engineering</h3>
+                    <h3 className="text-lg font-display uppercase font-bold text-text-primary">Systems Engineering</h3>
                     <p className="text-xs text-secondary-text leading-relaxed">
                       No empty theory. We architect production-grade backends, build scalable APIs, and deploy active systems directly to the cloud.
                     </p>
                   </div>
                 </div>
 
-                {/* 3. Tech Talks (Small) */}
-                <div className="md:col-span-4 p-6 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[180px]">
-                  <div className="w-8 h-8 rounded bg-purple-500/10 text-purple-400 flex items-center justify-center">
-                    <Presentation className="w-4 h-4" />
+                {/* 3. Tech Talks */}
+                <div className="md:col-span-4 p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]">
+                  <div className="w-10 h-10 rounded bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                    <Presentation className="w-5 h-5" />
                   </div>
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-display font-medium text-text-primary uppercase">Corporate Tech Talks</h4>
-                    <p className="text-xs text-secondary-text">
+                  <div className="mt-6 space-y-2">
+                    <h3 className="text-lg font-display font-bold text-text-primary uppercase">Corporate Tech Talks</h3>
+                    <p className="text-xs text-secondary-text leading-relaxed">
                       Direct syncs with elite architects modeling web platforms and explaining system-level file behaviors.
                     </p>
                   </div>
                 </div>
 
-                {/* 4. AI Bootcamps (Wide) */}
-                <div className="md:col-span-8 p-6 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[180px]">
+                {/* 4. AI Bootcamps */}
+                <div className="md:col-span-4 p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]">
                   <div className="flex justify-between items-start">
-                    <div className="w-8 h-8 rounded bg-emerald-green/15 text-emerald-green flex items-center justify-center">
-                      <Cpu className="w-4 h-4" />
+                    <div className="w-10 h-10 rounded bg-emerald-green/15 text-emerald-green flex items-center justify-center">
+                      <Cpu className="w-5 h-5" />
                     </div>
-                    <span className="text-[9px] font-mono text-emerald-green">INCUBATION SPOT</span>
+                    <span className="text-[9px] font-mono text-emerald-green bg-[#1A1A1A] border border-border-color py-1 px-3 rounded uppercase">INCUBATION SPOT</span>
                   </div>
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-display font-medium text-text-primary uppercase">Generative AI Bootcamps</h4>
-                    <p className="text-xs text-secondary-text max-w-lg">
-                      Master natural language embeddings, structured schemas, model temperature tuning, tool-calling APIs, and streaming interfaces securely using server-side proxies.
+                  <div className="mt-6 space-y-2">
+                    <h3 className="text-lg font-display font-bold text-text-primary uppercase">Generative AI Bootcamps</h3>
+                    <p className="text-xs text-secondary-text leading-relaxed">
+                      Master LLM embeddings, model temperature tuning, tool-calling APIs, and streaming interfaces securely.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 5. Open Source */}
+                <div className="md:col-span-4 p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]">
+                  <div className="flex justify-between items-start">
+                    <div className="w-10 h-10 rounded bg-pink-500/15 text-pink-400 flex items-center justify-center">
+                      <Github className="w-5 h-5" />
+                    </div>
+                    <span className="text-[9px] font-mono text-pink-400 bg-[#1A1A1A] border border-border-color py-1 px-3 rounded uppercase">COMMUNITY HUB</span>
+                  </div>
+                  <div className="mt-6 space-y-2">
+                    <h3 className="text-lg font-display font-bold text-text-primary uppercase">Open Source Contributions</h3>
+                    <p className="text-xs text-secondary-text leading-relaxed">
+                      Learn Git workflows, issue triaging, and PR reviews by contributing to live repositories used by developers globally.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 6. PitchCraft Accelerator */}
+                <div className="md:col-span-12 p-6 md:p-8 rounded-xl bg-brand-bg-sec/40 border border-border-color glass-panel glass-panel-hover transition-all flex flex-col justify-between min-h-[220px]">
+                  <div className="flex justify-between items-start">
+                    <div className="w-10 h-10 rounded bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <span className="text-[9px] font-mono text-amber-400 bg-[#1A1A1A] border border-border-color py-1 px-3 rounded uppercase">VENTURE BACKED</span>
+                  </div>
+                  <div className="mt-6 space-y-2">
+                    <h3 className="text-lg font-display font-bold text-text-primary uppercase">PitchCraft Accelerator</h3>
+                    <p className="text-xs text-secondary-text max-w-3xl leading-relaxed">
+                      From local host to seed round. We connect top student projects with angel investors, providing the mentorship and cloud credits needed to scale your prototype into a legitimate startup.
                     </p>
                   </div>
                 </div>
